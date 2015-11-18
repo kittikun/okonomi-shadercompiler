@@ -26,3 +26,11 @@
 *.exe
 *.out
 *.app
+*.opensdf
+*.sdf
+*.tlog
+*.idb
+
+.vs/
+bin/
+build/out/
