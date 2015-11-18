@@ -30,3 +30,7 @@
 *.sdf
 *.tlog
 *.idb
+
+.vs/
+bin/
+build/out/
