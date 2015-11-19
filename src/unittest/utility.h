@@ -20,48 +20,7 @@
 
 #pragma once
 
-#include <d3d12.h>
-#include <future>
 #include <string>
 
-namespace Okonomi
-{
-    // undef the one from math.h
-#undef DOMAIN
+std::string Loadfile(const std::wstring&);
 
-    enum class EShaderType
-    {
-        COMPUTE,
-        DOMAIN,
-        GEOMETRY,
-        HULL,
-        PIXEL,
-        VERTEX
-    };
-
-    struct ShaderDesc
-    {
-        std::string name;
-        EShaderType type;
-        std::string path;
-        std::string entry;
-        bool debug;
-    };
-
-    class DX12ShaderCompiler
-    {
-        DX12ShaderCompiler(const DX12ShaderCompiler&) = delete;
-        DX12ShaderCompiler& operator=(const DX12ShaderCompiler&) = delete;
-        DX12ShaderCompiler(DX12ShaderCompiler&&) = delete;
-        DX12ShaderCompiler& operator=(DX12ShaderCompiler&&) = delete;
-
-    public:
-		DX12ShaderCompiler() = default;
-
-		D3D12_SHADER_BYTECODE compileShader(const std::string& source, const ShaderDesc&);
-		std::future<D3D12_SHADER_BYTECODE> compileShaderAsync(const std::string& source, const ShaderDesc&);
-
-    private:
-        std::string getDXShaderType(EShaderType);
-    };
-} // namespace Okonomi

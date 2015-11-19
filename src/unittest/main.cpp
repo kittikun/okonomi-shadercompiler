@@ -19,3 +19,22 @@
 // THE SOFTWARE.
 
 #include <gtest/gtest.h>
+
+#include "utility.h"
+#include "shadercompiler/dx12_shader_compiler.h"
+
+TEST(ShaderCompiler, Compile)
+{
+	auto data = Loadfile(L"data/SimpleVS.hlsl");
+
+	Okonomi::DX12ShaderCompiler compiler;
+
+	Okonomi::ShaderDesc desc;
+
+	desc.name = "SimpleVS";
+	desc.path = "data/SimpleVS.hlsl";
+	desc.type = Okonomi::EShaderType::VERTEX;
+	desc.entry = "main";
+
+	compiler.compileShader(data, desc);
+}

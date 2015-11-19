@@ -18,50 +18,39 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#pragma once
+#include "utility.h"
 
-#include <d3d12.h>
-#include <future>
-#include <string>
+#include <algorithm>
+#include <fstream>
+#include <sstream>
 
-namespace Okonomi
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+
+#include <windows.h>
+
+std::string Loadfile(const std::wstring& filename)
 {
-    // undef the one from math.h
-#undef DOMAIN
+	std::wstring path;
+	std::wstring curDir;
 
-    enum class EShaderType
-    {
-        COMPUTE,
-        DOMAIN,
-        GEOMETRY,
-        HULL,
-        PIXEL,
-        VERTEX
-    };
+	curDir.resize(256);
 
-    struct ShaderDesc
-    {
-        std::string name;
-        EShaderType type;
-        std::string path;
-        std::string entry;
-        bool debug;
-    };
+	GetCurrentDirectory(256, &curDir.front());
+	curDir.shrink_to_fit();
 
-    class DX12ShaderCompiler
-    {
-        DX12ShaderCompiler(const DX12ShaderCompiler&) = delete;
-        DX12ShaderCompiler& operator=(const DX12ShaderCompiler&) = delete;
-        DX12ShaderCompiler(DX12ShaderCompiler&&) = delete;
-        DX12ShaderCompiler& operator=(DX12ShaderCompiler&&) = delete;
+	if (IsDebuggerPresent())
+		path = L"../" + filename;
+	else 
+		path = curDir + filename;
 
-    public:
-		DX12ShaderCompiler() = default;
+	std::replace(path.begin(), path.end(), '/', '\\');
 
-		D3D12_SHADER_BYTECODE compileShader(const std::string& source, const ShaderDesc&);
-		std::future<D3D12_SHADER_BYTECODE> compileShaderAsync(const std::string& source, const ShaderDesc&);
+	std::ifstream ifs(path);
+	std::stringstream ss;
 
-    private:
-        std::string getDXShaderType(EShaderType);
-    };
-} // namespace Okonomi
+	ss << ifs.rdbuf();
+
+	return ss.str();
+}
