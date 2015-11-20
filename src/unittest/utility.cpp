@@ -33,17 +33,11 @@
 std::string Loadfile(const std::wstring& filename)
 {
 	std::wstring path;
-	std::wstring curDir;
-
-	curDir.resize(256);
-
-	GetCurrentDirectory(256, &curDir.front());
-	curDir.shrink_to_fit();
 
 	if (IsDebuggerPresent())
 		path = L"../" + filename;
 	else 
-		path = curDir + filename;
+		path = filename;
 
 	std::replace(path.begin(), path.end(), '/', '\\');
 
