@@ -4,8 +4,6 @@ param(
 
 $root = "$PSScriptRoot\..\"
 
-
-
 Write-Host -foregroundcolor "Yellow" "Building gtest.."
 $buildCmd = "C:\Program Files (x86)\MSBuild\14.0\bin\msbuild.exe"
 $buildArgs = @(
