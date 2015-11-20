@@ -23,7 +23,8 @@ before_build:
     $buildArgs = @(
         $gtestSln,
         "/l:C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll",
-        "/p:Configuration=$Env:CONFIGURATION")
+        "/p:Configuration=$Env:CONFIGURATION",
+        "/verbosity:minimal")
     & $buildCmd $buildArgs
 build_script:
 - ps: |
@@ -35,8 +36,6 @@ build_script:
         "/p:Configuration=$Env:CONFIGURATION",
         "/verbosity:minimal")
     & $buildCmd $buildArgs
-# Disable tests until appveyor upgrades to Windows Server 2016
-test: off
 #test_script:
 #- ps: |
 #    Write-Host -foregroundcolor "Yellow" "Running tests.."
