@@ -23,6 +23,8 @@
 
 #include "utility.h"
 
+#include <iostream>
+
 TEST(ShaderCompiler, BadDescEntry)
 {
 	auto data = Loadfile(L"data/SimpleVS.hlsl");
@@ -97,6 +99,7 @@ TEST(ShaderCompiler, CompileVS)
 	desc.entry = "main";
 
 	auto lambda = [&]() {
+		std::cout << data << std::endl;
 		compiler.compileShader(data, desc);
 	};
 
@@ -117,6 +120,7 @@ TEST(ShaderCompiler, CompilePS)
 	desc.entry = "main";
 
 	auto lambda = [&]() {
+		std::cout << data << std::endl;
 		compiler.compileShader(data, desc);
 	};
 
