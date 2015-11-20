@@ -36,12 +36,14 @@ build_script:
         "/p:Configuration=$Env:CONFIGURATION",
         "/verbosity:minimal")
     & $buildCmd $buildArgs
-test_script:
-- ps: |
-    Write-Host -foregroundcolor "Yellow" "Running tests.."
-    Set-Location $Env:APPVEYOR_BUILD_FOLDER
-    $testCmd = "$Env:APPVEYOR_BUILD_FOLDER\bin\Win32\$Env:CONFIGURATION\UnitTest.exe"
-    & $testCmd
+# Disable tests until appveyor upgrades to Windows Server 2016
+test: off
+#test_script:
+#- ps: |
+#    Write-Host -foregroundcolor "Yellow" "Running tests.."
+#    Set-Location $Env:APPVEYOR_BUILD_FOLDER
+#    $testCmd = "$Env:APPVEYOR_BUILD_FOLDER\bin\Win32\$Env:CONFIGURATION\UnitTest.exe"
+#    & $testCmd
 notifications:
 - provider: Slack
   auth_token:

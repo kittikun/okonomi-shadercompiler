@@ -23,118 +23,119 @@
 
 #include "utility.h"
 
-#include <iostream>
-
 TEST(ShaderCompiler, BadDescEntry)
 {
-	auto data = Loadfile(L"data/SimpleVS.hlsl");
+    auto data = Loadfile(L"data/SimpleVS.hlsl");
 
-	Okonomi::DX12ShaderCompiler compiler;
+    Okonomi::DX12ShaderCompiler compiler;
 
-	Okonomi::ShaderDesc desc;
+    Okonomi::ShaderDesc desc;
 
-	desc.name = "SimpleVS";
-	desc.path = "data/SimpleVS.hlsl";
-	desc.type = Okonomi::EShaderType::VERTEX;
-	desc.entry = "test";
+    desc.name = "SimpleVS";
+    desc.path = "data/SimpleVS.hlsl";
+    desc.type = Okonomi::EShaderType::VERTEX;
+    desc.entry = "test";
 
-	auto lambda = [&]() {
-		compiler.compileShader(data, desc);
-	};
+    auto lambda = [&]()
+    {
+        compiler.compileShader(data, desc);
+    };
 
-	ASSERT_ANY_THROW(lambda());
+    ASSERT_ANY_THROW(lambda());
 }
 
 TEST(ShaderCompiler, BadDescType)
 {
-	auto data = Loadfile(L"data/SimpleVS.hlsl");
+    auto data = Loadfile(L"data/SimpleVS.hlsl");
 
-	Okonomi::DX12ShaderCompiler compiler;
+    Okonomi::DX12ShaderCompiler compiler;
 
-	Okonomi::ShaderDesc desc;
+    Okonomi::ShaderDesc desc;
 
-	desc.name = "SimpleVS";
-	desc.path = "data/SimpleVS.hlsl";
-	desc.type = Okonomi::EShaderType::PIXEL;
-	desc.entry = "main";
+    desc.name = "SimpleVS";
+    desc.path = "data/SimpleVS.hlsl";
+    desc.type = Okonomi::EShaderType::PIXEL;
+    desc.entry = "main";
 
-	auto lambda = [&]() {
-		compiler.compileShader(data, desc);
-	};
+    auto lambda = [&]()
+    {
+        compiler.compileShader(data, desc);
+    };
 
-	ASSERT_ANY_THROW(lambda());
+    ASSERT_ANY_THROW(lambda());
 }
 
 TEST(ShaderCompiler, CompileAsync)
 {
-	auto data = Loadfile(L"data/SimpleVS.hlsl");
+    auto data = Loadfile(L"data/SimpleVS.hlsl");
 
-	Okonomi::DX12ShaderCompiler compiler;
+    Okonomi::DX12ShaderCompiler compiler;
 
-	Okonomi::ShaderDesc desc;
+    Okonomi::ShaderDesc desc;
 
-	desc.name = "SimpleVS";
-	desc.path = "data/SimpleVS.hlsl";
-	desc.type = Okonomi::EShaderType::VERTEX;
-	desc.entry = "main";
+    desc.name = "SimpleVS";
+    desc.path = "data/SimpleVS.hlsl";
+    desc.type = Okonomi::EShaderType::VERTEX;
+    desc.entry = "main";
 
-	auto lambda = [&]() {
-		auto res = compiler.compileShaderAsync(data, desc);
-	};
+    auto lambda = [&]()
+    {
+        auto res = compiler.compileShaderAsync(data, desc);
+    };
 
-	ASSERT_NO_THROW(lambda());
+    ASSERT_NO_THROW(lambda());
 }
 
 TEST(ShaderCompiler, CompileVS)
 {
-	auto data = Loadfile(L"data/SimpleVS.hlsl");
+    auto data = Loadfile(L"data/SimpleVS.hlsl");
 
-	Okonomi::DX12ShaderCompiler compiler;
+    Okonomi::DX12ShaderCompiler compiler;
 
-	Okonomi::ShaderDesc desc;
+    Okonomi::ShaderDesc desc;
 
-	desc.name = "SimpleVS";
-	desc.path = "data/SimpleVS.hlsl";
-	desc.type = Okonomi::EShaderType::VERTEX;
-	desc.entry = "main";
+    desc.name = "SimpleVS";
+    desc.path = "data/SimpleVS.hlsl";
+    desc.type = Okonomi::EShaderType::VERTEX;
+    desc.entry = "main";
 
-	auto lambda = [&]() {
-		std::cout << data << std::endl;
-		compiler.compileShader(data, desc);
-	};
+    auto lambda = [&]()
+    {
+        compiler.compileShader(data, desc);
+    };
 
-	ASSERT_NO_THROW(lambda());
+    ASSERT_NO_THROW(lambda());
 }
 
 TEST(ShaderCompiler, CompilePS)
 {
-	auto data = Loadfile(L"data/SimplePS.hlsl");
+    auto data = Loadfile(L"data/SimplePS.hlsl");
 
-	Okonomi::DX12ShaderCompiler compiler;
+    Okonomi::DX12ShaderCompiler compiler;
 
-	Okonomi::ShaderDesc desc;
+    Okonomi::ShaderDesc desc;
 
-	desc.name = "SimplePS";
-	desc.path = "data/SimplePS.hlsl";
-	desc.type = Okonomi::EShaderType::PIXEL;
-	desc.entry = "main";
+    desc.name = "SimplePS";
+    desc.path = "data/SimplePS.hlsl";
+    desc.type = Okonomi::EShaderType::PIXEL;
+    desc.entry = "main";
 
-	auto lambda = [&]() {
-		std::cout << data << std::endl;
-		compiler.compileShader(data, desc);
-	};
+    auto lambda = [&]()
+    {
+        compiler.compileShader(data, desc);
+    };
 
-	ASSERT_NO_THROW(lambda());
+    ASSERT_NO_THROW(lambda());
 }
-
 
 TEST(ShaderCompiler, SourceEmpty)
 {
-	Okonomi::DX12ShaderCompiler compiler;
+    Okonomi::DX12ShaderCompiler compiler;
 
-	auto lambda = [&]() {
-		compiler.compileShader("", Okonomi::ShaderDesc());
-	};
+    auto lambda = [&]()
+    {
+        compiler.compileShader("", Okonomi::ShaderDesc());
+    };
 
-	ASSERT_ANY_THROW(lambda());
+    ASSERT_ANY_THROW(lambda());
 }
