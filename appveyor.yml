@@ -14,19 +14,22 @@ install:
     git submodule update --init --recursive
 before_build:
 - ps: |
-    $script = "$Env:APPVEYOR_BUILD_FOLDER\build\prebuild.ps1"
-
-    & $script $Env:CONFIGURATION
+    Write-Host -foregroundcolor "Yellow" "Building gtest.."
+    $buildCmd = "C:\Program Files (x86)\MSBuild\14.0\bin\msbuild.exe"
+    $buildArgs = @(
+        "$root\src\external\googletest\googletest\msvc\gtest-md.sln",
+        "/l:C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll",
+        "/p:Configuration=$Env:CONFIGURATION")
+    & $buildCmd $buildArgs
 build_script:
 - ps: |
     Write-Host -foregroundcolor "Yellow" "Build step starting.."
     $buildCmd = "C:\Program Files (x86)\MSBuild\14.0\bin\msbuild.exe"
     $buildArgs = @(
-          "$Env:APPVEYOR_BUILD_FOLDER\build\ShaderCompiler.sln",
-          "/l:C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll",
-          "/p:Configuration=$Env:CONFIGURATION",
-          "/verbosity:minimal")
-
+        "$Env:APPVEYOR_BUILD_FOLDER\build\ShaderCompiler.sln",
+        "/l:C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll",
+        "/p:Configuration=$Env:CONFIGURATION",
+        "/verbosity:minimal")
     & $buildCmd $buildArgs
 # Disable tests until appveyor upgrades to Windows Server 2016
 test: off
