@@ -10,5 +10,3 @@ $buildArgs = @(
 	  "$root\src\external\googletest\googletest\msvc\gtest-md.sln",
 	  "/l:C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll",
 	  "/p:Configuration=$Env:CONFIGURATION")
-	  #"/p:Platform=$env:PLATFORM",
-	  #"/verbosity:minimal")
