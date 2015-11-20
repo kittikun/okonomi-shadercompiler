@@ -20,21 +20,11 @@
 
 #include <gtest/gtest.h>
 
-#include "utility.h"
-#include "shadercompiler/dx12_shader_compiler.h"
-
-TEST(ShaderCompiler, Compile)
+int main(int argc, char **argv)
 {
-	auto data = Loadfile(L"data/SimpleVS.hlsl");
+	::testing::InitGoogleTest(&argc, argv);
 
-	Okonomi::DX12ShaderCompiler compiler;
+	auto res = RUN_ALL_TESTS();
 
-	Okonomi::ShaderDesc desc;
-
-	desc.name = "SimpleVS";
-	desc.path = "data/SimpleVS.hlsl";
-	desc.type = Okonomi::EShaderType::VERTEX;
-	desc.entry = "main";
-
-	compiler.compileShader(data, desc);
+	return res;
 }

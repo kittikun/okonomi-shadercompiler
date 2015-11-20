@@ -12,6 +12,9 @@
     <ClCompile Include="..\src\unittest\utility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\unittest\dx12_shader_compiler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\unittest\utility.h">

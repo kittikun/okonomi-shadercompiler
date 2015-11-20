@@ -39,6 +39,9 @@ namespace Okonomi
         auto hr = D3DCompile(source.c_str(), source.size(), desc.path.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
             desc.entry.c_str(), getDXShaderType(desc.type).c_str(), flags, 0, &shaderBlob, &errorBlob);
 
+		if (hr != S_OK)
+			throw new std::runtime_error("Shader compilation failed");
+
 		D3D12_SHADER_BYTECODE bc;
 
 		bc.BytecodeLength = shaderBlob->GetBufferSize();
