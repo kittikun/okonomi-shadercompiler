@@ -41,6 +41,7 @@ std::string Loadfile(const std::wstring& filename)
 	GetCurrentDirectory(256, &curDir.front());
 	curDir.shrink_to_fit();
 
+	std::wcout << filename << std::endl;
 	std::wcout << curDir << std::endl;
 
 	if (IsDebuggerPresent())
@@ -54,6 +55,8 @@ std::string Loadfile(const std::wstring& filename)
 	std::stringstream ss;
 
 	ss << ifs.rdbuf();
+
+	std::cout << ss.str() << std::endl;
 
 	return ss.str();
 }

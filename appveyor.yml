@@ -14,7 +14,7 @@ install:
     git submodule update --init --recursive --quiet
 before_build:
 - ps: |
-    Write-Host -foregroundcolor "Yellow" "Upgrading gtest for VS2015.."
+    Write-Host -foregroundcolor "Yellow" "Upgrading gtest solution to VS2015.."
     $gtestSln = "$Env:APPVEYOR_BUILD_FOLDER\src\external\googletest\googletest\msvc\gtest-md.sln"
     $vsPath = "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe"
     & $vsPath /upgrade $gtestSln | Wait-Process
