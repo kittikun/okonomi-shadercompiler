@@ -36,20 +36,12 @@ build_script:
         "/p:Configuration=$Env:CONFIGURATION",
         "/verbosity:minimal")
     & $buildCmd $buildArgs
-#test_script:
-#- ps: |
-#    Write-Host -foregroundcolor "Yellow" "Running tests.."
-#    Set-Location $Env:APPVEYOR_BUILD_FOLDER
-#    $resultXml = "$Env:APPVEYOR_BUILD_FOLDER\tests.xml"
-#    if ($Env:CONFIGURATION -eq "Debug") {
-#        $testCmd = "$Env:APPVEYOR_BUILD_FOLDER\bin\x64\Debug\UnitTest.exe"
-#    } elseif ($Env:CONFIGURATION -eq "Release") {
-#        $testCmd = "$Env:APPVEYOR_BUILD_FOLDER\bin\x64\Release\UnitTest.exe"
-#    }
-#    & $testCmd
-#    Write-Host -foregroundcolor "Yellow" "sfssts.."
-#    [xml]$xml = Get-Content "./tests.xml"
-#    $xml.tests.test | foreach { "Add-AppveyorTest -Name" + $_.name + " -Outcome " + $_.outcome + " -Duration " + $_.duration }
+test_script:
+- ps: |
+    Write-Host -foregroundcolor "Yellow" "Running tests.."
+    Set-Location $Env:APPVEYOR_BUILD_FOLDER
+    $testCmd = "$Env:APPVEYOR_BUILD_FOLDER\bin\Win32\$Env:CONFIGURATION\UnitTest.exe"
+    & $testCmd
 notifications:
 - provider: Slack
   auth_token:
