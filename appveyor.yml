@@ -1,0 +1,55 @@
+version: 0.0.{build}
+branches:
+  only:
+  #- master
+  - develop
+os: Visual Studio 2015
+configuration:
+- Release
+- Debug
+#platform: x86
+install:
+- ps: |
+    Write-Host -foregroundcolor "Yellow" "Updating submodules.."
+    git submodule update --init --recursive --quiet
+before_build:
+- ps: |
+    $script = "$Env:APPVEYOR_BUILD_FOLDER\build\prebuild.ps1"
+
+    & $script $Env:CONFIGURATION
+build_script:
+- ps: |
+    Write-Host -foregroundcolor "Yellow" "Build step starting.."
+    $buildCmd = "C:\Program Files (x86)\MSBuild\14.0\bin\msbuild.exe"
+    $buildArgs = @(
+          "$Env:APPVEYOR_BUILD_FOLDER\build\ShaderCompiler.sln",
+          "/l:C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll",
+          "/p:Configuration=$Env:CONFIGURATION",
+          #"/p:Platform=$env:PLATFORM",
+          "/verbosity:minimal")
+
+    & $buildCmd $buildArgs
+# Disable tests until appveyor upgrades to Windows Server 2016
+test: off
+#test_script:
+#- ps: |
+#    Write-Host -foregroundcolor "Yellow" "Running tests.."
+#    Set-Location $Env:APPVEYOR_BUILD_FOLDER
+#    $resultXml = "$Env:APPVEYOR_BUILD_FOLDER\tests.xml"
+#    if ($Env:CONFIGURATION -eq "Debug") {
+#        $testCmd = "$Env:APPVEYOR_BUILD_FOLDER\bin\x64\Debug\UnitTest.exe"
+#    } elseif ($Env:CONFIGURATION -eq "Release") {
+#        $testCmd = "$Env:APPVEYOR_BUILD_FOLDER\bin\x64\Release\UnitTest.exe"
+#    }
+#    & $testCmd
+#    Write-Host -foregroundcolor "Yellow" "sfssts.."
+#    [xml]$xml = Get-Content "./tests.xml"
+#    $xml.tests.test | foreach { "Add-AppveyorTest -Name" + $_.name + " -Outcome " + $_.outcome + " -Duration " + $_.duration }
+notifications:
+- provider: Slack
+  auth_token:
+    secure: NL05oTnkUQ8es7KG6L70RSOPTd6rV9/bq00OrCiEpfuIZ4NOV008mHhbG7J+YZeXBy1VzEzNgZXFNimtGhALXQ==
+  channel: bots
+  on_build_success: true
+  on_build_failure: true
+  on_build_status_changed: false

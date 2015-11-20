@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 #include <gtest/gtest.h>
-#include <shadercompiler/dx12_shader_compiler.h>
+#include <dx12_shader_compiler.h>
 
 #include "utility.h"
 
