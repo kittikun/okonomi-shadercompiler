@@ -26,6 +26,9 @@ namespace Okonomi
 {
 	D3D12_SHADER_BYTECODE DX12ShaderCompiler::compileShader(const std::string& source, const ShaderDesc& desc)
     {
+		if (source.empty())
+			throw new std::invalid_argument("source is empty");
+
         ID3DBlob* shaderBlob = nullptr;
         ID3DBlob* errorBlob = nullptr;
 
@@ -54,7 +57,7 @@ namespace Okonomi
 	{
 		auto f = std::bind(&DX12ShaderCompiler::compileShader, this, std::placeholders::_1, std::placeholders::_2);
 
-		return std::async(f, source, desc);
+		return std::async(std::launch::async, f, source, desc);
 	}
 
     std::string DX12ShaderCompiler::getDXShaderType(EShaderType type)

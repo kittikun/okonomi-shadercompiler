@@ -29,10 +29,19 @@
 #endif
 
 #include <windows.h>
+#include <iostream>
 
 std::string Loadfile(const std::wstring& filename)
 {
 	std::wstring path;
+	std::wstring curDir;
+
+	curDir.resize(256);
+
+	GetCurrentDirectory(256, &curDir.front());
+	curDir.shrink_to_fit();
+
+	std::wcout << curDir << std::endl;
 
 	if (IsDebuggerPresent())
 		path = L"../" + filename;

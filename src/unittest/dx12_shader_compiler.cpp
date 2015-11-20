@@ -43,28 +43,6 @@ TEST(ShaderCompiler, BadDescEntry)
 	ASSERT_ANY_THROW(lambda());
 }
 
-TEST(ShaderCompiler, BadDescEntryAsync)
-{
-	auto data = Loadfile(L"data/SimpleVS.hlsl");
-
-	Okonomi::DX12ShaderCompiler compiler;
-
-	Okonomi::ShaderDesc desc;
-
-	desc.name = "SimpleVS";
-	desc.path = "data/SimpleVS.hlsl";
-	desc.type = Okonomi::EShaderType::VERTEX;
-	desc.entry = "test";
-
-	auto lambda = [&]() {
-		auto res = compiler.compileShaderAsync(data, desc);
-
-		res.get();
-	};
-
-	ASSERT_ANY_THROW(lambda());
-}
-
 TEST(ShaderCompiler, BadDescType)
 {
 	auto data = Loadfile(L"data/SimpleVS.hlsl");
@@ -85,7 +63,7 @@ TEST(ShaderCompiler, BadDescType)
 	ASSERT_ANY_THROW(lambda());
 }
 
-TEST(ShaderCompiler, BadDescTypeAsync)
+TEST(ShaderCompiler, CompileAsync)
 {
 	auto data = Loadfile(L"data/SimpleVS.hlsl");
 
@@ -95,16 +73,14 @@ TEST(ShaderCompiler, BadDescTypeAsync)
 
 	desc.name = "SimpleVS";
 	desc.path = "data/SimpleVS.hlsl";
-	desc.type = Okonomi::EShaderType::PIXEL;
+	desc.type = Okonomi::EShaderType::VERTEX;
 	desc.entry = "main";
 
 	auto lambda = [&]() {
 		auto res = compiler.compileShaderAsync(data, desc);
-
-		res.get();
 	};
 
-	ASSERT_ANY_THROW(lambda());
+	ASSERT_NO_THROW(lambda());
 }
 
 TEST(ShaderCompiler, CompileVS)
@@ -120,9 +96,11 @@ TEST(ShaderCompiler, CompileVS)
 	desc.type = Okonomi::EShaderType::VERTEX;
 	desc.entry = "main";
 
-	ASSERT_NO_THROW({
-		auto res = compiler.compileShader(data, desc);
-	});
+	auto lambda = [&]() {
+		compiler.compileShader(data, desc);
+	};
+
+	ASSERT_NO_THROW(lambda());
 }
 
 TEST(ShaderCompiler, CompilePS)
@@ -138,7 +116,21 @@ TEST(ShaderCompiler, CompilePS)
 	desc.type = Okonomi::EShaderType::PIXEL;
 	desc.entry = "main";
 
-	ASSERT_NO_THROW({
-		auto res = compiler.compileShader(data, desc);
-	});
+	auto lambda = [&]() {
+		compiler.compileShader(data, desc);
+	};
+
+	ASSERT_NO_THROW(lambda());
+}
+
+
+TEST(ShaderCompiler, SourceEmpty)
+{
+	Okonomi::DX12ShaderCompiler compiler;
+
+	auto lambda = [&]() {
+		compiler.compileShader("", Okonomi::ShaderDesc());
+	};
+
+	ASSERT_ANY_THROW(lambda());
 }
