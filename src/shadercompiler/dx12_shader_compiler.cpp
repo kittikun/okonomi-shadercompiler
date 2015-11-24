@@ -22,12 +22,14 @@
 
 #include <d3dcompiler.h>
 
+#include "utility.h"
+
 namespace Okonomi
 {
-	D3D12_SHADER_BYTECODE DX12ShaderCompiler::compileShader(const std::string& source, const ShaderDesc& desc)
+    D3D12_SHADER_BYTECODE DX12ShaderCompiler::compileShader(const std::string& source, const ShaderDesc& desc)
     {
-		if (source.empty())
-			throw new std::invalid_argument("source is empty");
+        if (source.empty())
+            throw new std::invalid_argument("source is empty");
 
         ID3DBlob* shaderBlob = nullptr;
         ID3DBlob* errorBlob = nullptr;
@@ -42,23 +44,23 @@ namespace Okonomi
         auto hr = D3DCompile(source.c_str(), source.size(), desc.path.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
             desc.entry.c_str(), getDXShaderType(desc.type).c_str(), flags, 0, &shaderBlob, &errorBlob);
 
-		if (hr != S_OK)
-			throw new std::runtime_error("Shader compilation failed");
+        if (hr != S_OK)
+            throw new std::runtime_error("Shader compilation failed");
 
-		D3D12_SHADER_BYTECODE bc;
+        D3D12_SHADER_BYTECODE bc;
 
-		bc.BytecodeLength = shaderBlob->GetBufferSize();
-		bc.pShaderBytecode = shaderBlob->GetBufferPointer();
+        bc.BytecodeLength = shaderBlob->GetBufferSize();
+        bc.pShaderBytecode = shaderBlob->GetBufferPointer();
 
-		return bc;
+        return bc;
     }
 
-	std::future<D3D12_SHADER_BYTECODE> DX12ShaderCompiler::compileShaderAsync(const std::string& source, const ShaderDesc& desc)
-	{
-		auto f = std::bind(&DX12ShaderCompiler::compileShader, this, std::placeholders::_1, std::placeholders::_2);
+    std::future<D3D12_SHADER_BYTECODE> DX12ShaderCompiler::compileShaderAsync(const std::string& source, const ShaderDesc& desc)
+    {
+        auto f = std::bind(&DX12ShaderCompiler::compileShader, this, std::placeholders::_1, std::placeholders::_2);
 
-		return std::async(std::launch::async, f, source, desc);
-	}
+        return std::async(std::launch::async, f, source, desc);
+    }
 
     std::string DX12ShaderCompiler::getDXShaderType(EShaderType type)
     {

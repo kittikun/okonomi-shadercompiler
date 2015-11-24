@@ -18,21 +18,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <gtest/gtest.h>
+#pragma once
 
-#pragma comment(lib, "ShaderCompiler.lib")
+#include <d3d12.h>
+#include <D3d12shader.h>
+#include <vector>
 
-#ifdef _DEBUG
-#pragma comment(lib, "gtestd.lib")
-#else
-#pragma comment(lib, "gtest.lib")
-#endif
+#include "dx12_constant_table.h"
 
-int main(int argc, char **argv)
+namespace Okonomi
 {
-    ::testing::InitGoogleTest(&argc, argv);
+    class DX12ShaderParser
+    {
+        DX12ShaderParser(const DX12ShaderParser&) = delete;
+        DX12ShaderParser& operator=(const DX12ShaderParser&) = delete;
+        DX12ShaderParser(DX12ShaderParser&&) = delete;
+        DX12ShaderParser& operator=(DX12ShaderParser&&) = delete;
+    public:
+        DX12ShaderParser() = default;
 
-    auto res = RUN_ALL_TESTS();
+        struct ResultType
+        {
+            std::vector<DX12ConstantTable> cbuffers;
+        };
 
-    return res;
-}
+        auto ParseShader(const D3D12_SHADER_BYTECODE&)->ResultType;
+
+    private:
+        std::vector<DX12ConstantTable> parseConstantBuffers(ID3D12ShaderReflection*, const D3D12_SHADER_DESC&);
+    };
+} // namespace Okonomi

@@ -18,21 +18,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <gtest/gtest.h>
+#pragma once
 
-#pragma comment(lib, "ShaderCompiler.lib")
+// included everywhere so let's put this here for now
+#pragma comment(lib, "d3d12.lib")
+#pragma comment(lib, "d3dcompiler.lib")
 
-#ifdef _DEBUG
-#pragma comment(lib, "gtestd.lib")
+#include <iostream>
+
+#define USE_LOG 0
+
+#if USE_LOG
+#define LOG std::cout
 #else
-#pragma comment(lib, "gtest.lib")
+#define LOG if (false) std::cout
 #endif
-
-int main(int argc, char **argv)
-{
-    ::testing::InitGoogleTest(&argc, argv);
-
-    auto res = RUN_ALL_TESTS();
-
-    return res;
-}

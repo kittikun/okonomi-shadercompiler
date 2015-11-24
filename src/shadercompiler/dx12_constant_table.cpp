@@ -18,7 +18,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#include "dx12_constant_table.h"
+
 namespace Okonomi
 {
+    // for Variable tuple
+    constexpr uint_fast32_t OFFSET = 0;
+    constexpr uint_fast32_t SIZE = 1;
 
+    DX12ConstantTable::DX12ConstantTable(const std::string& name, uint_fast32_t size)
+        : name_{ name }
+    {
+        // https://developer.nvidia.com/content/constant-buffers-without-constant-pain-0
+        // All constant buffer data that is passed to XXSetConstantBuffers1() needs to be aligned to 256 byte boundaries.
+        size = (size + 255) & ~255;
+
+        data_.resize(size);
+    }
+
+    DX12ConstantTable::DX12ConstantTable(DX12ConstantTable&& other)
+    {
+    }
+
+    void DX12ConstantTable::addVariable(const std::string& name, uint_fast32_t offset, uint_fast32_t size)
+    {
+        offsetMap_.insert(std::make_pair(name, std::make_tuple(offset, size)));
+    }
 } // namespace Okonomi

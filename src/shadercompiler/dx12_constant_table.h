@@ -20,18 +20,32 @@
 
 #pragma once
 
+#include <string>
+#include <tuple>
+#include <unordered_map>
+#include <vector>
+
 namespace Okonomi
 {
-	class DX12ConstantTable
-	{
-		DX12ConstantTable(const DX12ConstantTable&) = delete;
-		DX12ConstantTable& operator=(const DX12ConstantTable&) = delete;
-		DX12ConstantTable(DX12ConstantTable&&) = delete;
-		DX12ConstantTable& operator=(DX12ConstantTable&&) = delete;
-	public:
+    class DX12ConstantTable
+    {
+        DX12ConstantTable(const DX12ConstantTable&) = delete;
+        DX12ConstantTable& operator=(const DX12ConstantTable&) = delete;
+        DX12ConstantTable& operator=(DX12ConstantTable&&) = delete;
+    public:
+        DX12ConstantTable(const std::string&, uint_fast32_t);
+        DX12ConstantTable(DX12ConstantTable&&);
 
-	private:
+        using Variable = std::tuple<uint_fast32_t, uint_fast32_t>;
 
-	};
+    private:
+        void addVariable(const std::string&, uint_fast32_t, uint_fast32_t);
 
+    private:
+        std::string name_;
+        std::vector<uint8_t> data_;
+        std::unordered_map<std::string, Variable> offsetMap_;     // not thread-safe but should be ok
+
+        friend class DX12ShaderParser;
+    };
 } // namespace Okonomi

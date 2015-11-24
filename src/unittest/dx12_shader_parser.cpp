@@ -19,20 +19,38 @@
 // THE SOFTWARE.
 
 #include <gtest/gtest.h>
+#include <dx12_shader_compiler.h>
+#include <dx12_shader_parser.h>
+#include "utility.h"
 
-#pragma comment(lib, "ShaderCompiler.lib")
-
-#ifdef _DEBUG
-#pragma comment(lib, "gtestd.lib")
-#else
-#pragma comment(lib, "gtest.lib")
-#endif
-
-int main(int argc, char **argv)
+class DX12ShaderParserTest : public ::testing::Test
 {
-    ::testing::InitGoogleTest(&argc, argv);
+protected:
+    void SetUp() override
+    {
+        auto data = Loadfile(L"data/SimpleVS.hlsl");
 
-    auto res = RUN_ALL_TESTS();
+        Okonomi::DX12ShaderCompiler compiler;
 
-    return res;
+        Okonomi::ShaderDesc desc;
+
+        desc.name = "SimpleVS";
+        desc.path = "data/SimpleVS.hlsl";
+        desc.type = Okonomi::EShaderType::VERTEX;
+        desc.entry = "main";
+
+        bc = compiler.compileShader(data, desc);
+    }
+
+protected:
+    D3D12_SHADER_BYTECODE bc;
+};
+
+TEST_F(DX12ShaderParserTest, BasicParse)
+{
+    Okonomi::DX12ShaderParser parser;
+
+    auto res = parser.ParseShader(bc);
+
+    EXPECT_GT(res.cbuffers.size(), 0);
 }
