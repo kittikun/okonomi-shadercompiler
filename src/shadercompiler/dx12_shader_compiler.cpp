@@ -29,7 +29,7 @@ namespace Okonomi
     D3D12_SHADER_BYTECODE DX12ShaderCompiler::compileShader(const std::string& source, const ShaderDesc& desc)
     {
         if (source.empty())
-            throw new std::invalid_argument("source is empty");
+            throw std::invalid_argument("source is empty");
 
         ID3DBlob* shaderBlob = nullptr;
         ID3DBlob* errorBlob = nullptr;
@@ -45,7 +45,7 @@ namespace Okonomi
             desc.entry.c_str(), getDXShaderType(desc.type).c_str(), flags, 0, &shaderBlob, &errorBlob);
 
         if (hr != S_OK)
-            throw new std::runtime_error("Shader compilation failed");
+            throw std::runtime_error("Shader compilation failed");
 
         D3D12_SHADER_BYTECODE bc;
 
@@ -87,7 +87,7 @@ namespace Okonomi
                 break;
 
             default:
-                throw new std::runtime_error{ "ShaderCompiler::getDXShaderType, unknown type" };
+                throw std::runtime_error{ "ShaderCompiler::getDXShaderType, unknown type" };
         }
 
         return res;

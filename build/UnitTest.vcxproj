@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\unittest\dx12_constant_table.cpp" />
     <ClCompile Include="..\src\unittest\dx12_shader_compiler.cpp" />
     <ClCompile Include="..\src\unittest\dx12_shader_parser.cpp" />
     <ClCompile Include="..\src\unittest\main.cpp" />

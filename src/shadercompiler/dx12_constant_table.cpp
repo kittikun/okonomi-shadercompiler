@@ -22,26 +22,53 @@
 
 namespace Okonomi
 {
-    // for Variable tuple
-    constexpr uint_fast32_t OFFSET = 0;
-    constexpr uint_fast32_t SIZE = 1;
-
     DX12ConstantTable::DX12ConstantTable(const std::string& name, uint_fast32_t size)
         : name_{ name }
+        , size_{ size }
     {
         // https://developer.nvidia.com/content/constant-buffers-without-constant-pain-0
         // All constant buffer data that is passed to XXSetConstantBuffers1() needs to be aligned to 256 byte boundaries.
-        size = (size + 255) & ~255;
-
-        data_.resize(size);
+        data_.resize((size + 255) & ~255);
     }
 
     DX12ConstantTable::DX12ConstantTable(DX12ConstantTable&& other)
+        : name_{ std::move(other.name_) }
+        , size_{ other.size_ }
+        , data_{ std::move(other.data_) }
+        , offsetMap_{ std::move(other.offsetMap_) }
     {
     }
 
     void DX12ConstantTable::addVariable(const std::string& name, uint_fast32_t offset, uint_fast32_t size)
     {
         offsetMap_.insert(std::make_pair(name, std::make_tuple(offset, size)));
+    }
+
+    const uint8_t* DX12ConstantTable::getData() const
+    {
+        if (data_.size() == 0)
+            return nullptr;
+
+        return &data_.front();
+    }
+
+    uint_fast32_t DX12ConstantTable::getOffset(const std::string& name) const
+    {
+        auto found = offsetMap_.find(name);
+
+        if (found == offsetMap_.end())
+            throw std::invalid_argument("DX12ConstantTable::getOffset invalid name");
+
+        return std::get<CT_VARIABLE_OFFSET>(found->second);
+    }
+
+    DX12ConstantTable& DX12ConstantTable::operator=(DX12ConstantTable&& rhs)
+    {
+        name_ = std::move(rhs.name_);
+        size_ = rhs.size_;
+        data_ = std::move(rhs.data_);
+        offsetMap_ = std::move(rhs.offsetMap_);
+
+        return *this;
     }
 } // namespace Okonomi

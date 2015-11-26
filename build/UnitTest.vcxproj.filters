@@ -18,6 +18,9 @@
     <ClCompile Include="..\src\unittest\dx12_shader_parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\unittest\dx12_constant_table.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\unittest\utility.h">

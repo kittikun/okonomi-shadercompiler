@@ -27,22 +27,64 @@
 
 namespace Okonomi
 {
+    // for DX12ConstantTable::Variable tuple
+    constexpr uint_fast32_t CT_VARIABLE_OFFSET = 0;
+    constexpr uint_fast32_t CT_VARIABLE_SIZE = 1;
+
     class DX12ConstantTable
     {
         DX12ConstantTable(const DX12ConstantTable&) = delete;
         DX12ConstantTable& operator=(const DX12ConstantTable&) = delete;
-        DX12ConstantTable& operator=(DX12ConstantTable&&) = delete;
     public:
+        DX12ConstantTable() = default;
         DX12ConstantTable(const std::string&, uint_fast32_t);
         DX12ConstantTable(DX12ConstantTable&&);
 
-        using Variable = std::tuple<uint_fast32_t, uint_fast32_t>;
+        DX12ConstantTable& operator=(DX12ConstantTable&&);
+
+        uint_fast32_t getOffset(const std::string&) const;
+        inline std::string getName() const { return name_; }
+        const uint8_t* getData() const;
+        inline auto getSize() const { return data_.size(); }
+
+        template<typename T>
+        void setValue(const std::string& name, const T& value)
+        {
+            auto found = offsetMap_.find(name);
+
+            if (found == offsetMap_.end())
+                throw std::invalid_argument("DX12ConstantTable::setValue invalid name");
+
+            auto size = sizeof(T);
+
+            if (size != std::get<CT_VARIABLE_SIZE>(found->second))
+                throw std::invalid_argument("DX12ConstantTable::setValue invalid size");
+
+            std::memcpy(&data_.front() + std::get<CT_VARIABLE_OFFSET>(found->second), &value, size);
+        }
+
+        template<typename T>
+        void setValue(uint_fast32_t offset, const T& value)
+        {
+            if (offset > size_)
+                throw std::invalid_argument("DX12ConstantTable::setValue invalid offset");
+
+            auto size = sizeof(T);
+
+            if (offset + size > size_)
+                throw std::out_of_range("DX12ConstantTable::setValue out of bounds");
+
+            std::memcpy(&data_.front() + offset, &value, size);
+        }
 
     private:
         void addVariable(const std::string&, uint_fast32_t, uint_fast32_t);
 
     private:
+        using Variable = std::tuple<uint_fast32_t, uint_fast32_t>;
+
         std::string name_;
+        uint_fast32_t size_;
         std::vector<uint8_t> data_;
         std::unordered_map<std::string, Variable> offsetMap_;     // not thread-safe but should be ok
 

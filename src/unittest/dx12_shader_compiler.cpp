@@ -19,6 +19,7 @@
 // THE SOFTWARE.
 
 #include <gtest/gtest.h>
+
 #include <dx12_shader_compiler.h>
 
 #include "utility.h"
@@ -41,7 +42,7 @@ TEST(ShaderCompiler, BadDescEntry)
         compiler.compileShader(data, desc);
     };
 
-    ASSERT_ANY_THROW(lambda());
+    EXPECT_THROW(lambda(), std::runtime_error);
 }
 
 TEST(ShaderCompiler, BadDescType)
@@ -62,7 +63,7 @@ TEST(ShaderCompiler, BadDescType)
         compiler.compileShader(data, desc);
     };
 
-    ASSERT_ANY_THROW(lambda());
+    EXPECT_THROW(lambda(), std::runtime_error);
 }
 
 TEST(ShaderCompiler, CompileAsync)
@@ -83,7 +84,7 @@ TEST(ShaderCompiler, CompileAsync)
         auto res = compiler.compileShaderAsync(data, desc);
     };
 
-    ASSERT_NO_THROW(lambda());
+    EXPECT_NO_THROW(lambda());
 }
 
 TEST(ShaderCompiler, CompileVS)
@@ -104,7 +105,7 @@ TEST(ShaderCompiler, CompileVS)
         compiler.compileShader(data, desc);
     };
 
-    ASSERT_NO_THROW(lambda());
+    EXPECT_NO_THROW(lambda());
 }
 
 TEST(ShaderCompiler, CompilePS)
@@ -125,7 +126,45 @@ TEST(ShaderCompiler, CompilePS)
         compiler.compileShader(data, desc);
     };
 
-    ASSERT_NO_THROW(lambda());
+    EXPECT_NO_THROW(lambda());
+}
+
+TEST(ShaderCompiler, ValidVS)
+{
+    auto data = Loadfile(L"data/SimpleVS.hlsl");
+
+    Okonomi::DX12ShaderCompiler compiler;
+
+    Okonomi::ShaderDesc desc;
+
+    desc.name = "SimpleVS";
+    desc.path = "data/SimpleVS.hlsl";
+    desc.type = Okonomi::EShaderType::VERTEX;
+    desc.entry = "main";
+
+    auto res = compiler.compileShader(data, desc);
+
+    EXPECT_GT(res.BytecodeLength, 0);
+    EXPECT_NE(res.pShaderBytecode, nullptr);
+}
+
+TEST(ShaderCompiler, ValidPS)
+{
+    auto data = Loadfile(L"data/SimplePS.hlsl");
+
+    Okonomi::DX12ShaderCompiler compiler;
+
+    Okonomi::ShaderDesc desc;
+
+    desc.name = "SimplePS";
+    desc.path = "data/SimplePS.hlsl";
+    desc.type = Okonomi::EShaderType::PIXEL;
+    desc.entry = "main";
+
+    auto res = compiler.compileShader(data, desc);
+
+    EXPECT_GT(res.BytecodeLength, 0);
+    EXPECT_NE(res.pShaderBytecode, nullptr);
 }
 
 TEST(ShaderCompiler, SourceEmpty)
@@ -137,5 +176,5 @@ TEST(ShaderCompiler, SourceEmpty)
         compiler.compileShader("", Okonomi::ShaderDesc());
     };
 
-    ASSERT_ANY_THROW(lambda());
+    EXPECT_THROW(lambda(), std::invalid_argument);
 }

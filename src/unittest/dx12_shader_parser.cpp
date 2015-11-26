@@ -19,8 +19,10 @@
 // THE SOFTWARE.
 
 #include <gtest/gtest.h>
+
 #include <dx12_shader_compiler.h>
 #include <dx12_shader_parser.h>
+
 #include "utility.h"
 
 class DX12ShaderParserTest : public ::testing::Test
@@ -39,18 +41,18 @@ protected:
         desc.type = Okonomi::EShaderType::VERTEX;
         desc.entry = "main";
 
-        bc = compiler.compileShader(data, desc);
+        bc_ = compiler.compileShader(data, desc);
     }
 
 protected:
-    D3D12_SHADER_BYTECODE bc;
+    D3D12_SHADER_BYTECODE bc_;
 };
 
-TEST_F(DX12ShaderParserTest, BasicParse)
+TEST_F(DX12ShaderParserTest, Parse)
 {
     Okonomi::DX12ShaderParser parser;
 
-    auto res = parser.ParseShader(bc);
+    auto res = parser.ParseShader(bc_);
 
     EXPECT_GT(res.cbuffers.size(), 0);
 }
