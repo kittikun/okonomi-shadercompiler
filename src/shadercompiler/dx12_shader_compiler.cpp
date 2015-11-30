@@ -26,6 +26,11 @@
 
 namespace Okonomi
 {
+    ShaderDesc::ShaderDesc() noexcept
+        : debug{ false }
+    {
+    }
+
     D3D12_SHADER_BYTECODE DX12ShaderCompiler::compileShader(const std::string& source, const ShaderDesc& desc)
     {
         if (source.empty())

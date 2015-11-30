@@ -20,6 +20,8 @@
 
 #pragma once
 
+#pragma comment(lib, "ShaderCompiler.lib")
+
 #include <d3d12.h>
 #include <future>
 #include <string>
@@ -41,6 +43,8 @@ namespace Okonomi
 
     struct ShaderDesc
     {
+        ShaderDesc() noexcept;
+
         std::string name;
         EShaderType type;
         std::string path;
@@ -56,10 +60,10 @@ namespace Okonomi
         DX12ShaderCompiler& operator=(DX12ShaderCompiler&&) = delete;
 
     public:
-		DX12ShaderCompiler() = default;
+        DX12ShaderCompiler() = default;
 
-		D3D12_SHADER_BYTECODE compileShader(const std::string& source, const ShaderDesc&);
-		std::future<D3D12_SHADER_BYTECODE> compileShaderAsync(const std::string& source, const ShaderDesc&);
+        D3D12_SHADER_BYTECODE compileShader(const std::string& source, const ShaderDesc&);
+        std::future<D3D12_SHADER_BYTECODE> compileShaderAsync(const std::string& source, const ShaderDesc&);
 
     private:
         std::string getDXShaderType(EShaderType);
