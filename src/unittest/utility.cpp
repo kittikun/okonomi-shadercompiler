@@ -1,4 +1,4 @@
-// Copyright(c) 2015 Kitti Vongsay
+// Copyright(c) 2015-2016 Kitti Vongsay
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files(the "Software"), to deal
@@ -32,19 +32,19 @@
 
 std::string Loadfile(const std::wstring& filename)
 {
-	std::wstring path;
+    std::wstring path;
 
-	if (IsDebuggerPresent())
-		path = L"../" + filename;
-	else 
-		path = filename;
+    if (IsDebuggerPresent())
+        path = L"../" + filename;
+    else
+        path = filename;
 
-	std::replace(path.begin(), path.end(), '/', '\\');
+    std::replace(path.begin(), path.end(), '/', '\\');
 
-	std::ifstream ifs(path);
-	std::stringstream ss;
+    std::ifstream ifs(path);
+    std::stringstream ss;
 
-	ss << ifs.rdbuf();
+    ss << ifs.rdbuf();
 
-	return ss.str();
+    return ss.str();
 }

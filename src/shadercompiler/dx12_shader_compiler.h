@@ -1,4 +1,4 @@
-// Copyright(c) 2015 Kitti Vongsay
+// Copyright(c) 2015-2016 Kitti Vongsay
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files(the "Software"), to deal
@@ -56,10 +56,10 @@ namespace Okonomi
         DX12ShaderCompiler& operator=(DX12ShaderCompiler&&) = delete;
 
     public:
-		DX12ShaderCompiler() = default;
+        DX12ShaderCompiler() = default;
 
-		D3D12_SHADER_BYTECODE compileShader(const std::string& source, const ShaderDesc&);
-		std::future<D3D12_SHADER_BYTECODE> compileShaderAsync(const std::string& source, const ShaderDesc&);
+        D3D12_SHADER_BYTECODE compileShader(const std::string& source, const ShaderDesc&);
+        std::future<D3D12_SHADER_BYTECODE> compileShaderAsync(const std::string& source, const ShaderDesc&);
 
     private:
         std::string getDXShaderType(EShaderType);
