@@ -20,6 +20,8 @@
 
 #pragma once
 
+#pragma comment(lib, "ShaderCompiler.lib")
+
 #include <d3d12.h>
 #include <future>
 #include <string>
@@ -41,6 +43,8 @@ namespace Okonomi
 
     struct ShaderDesc
     {
+        ShaderDesc() noexcept;
+
         std::string name;
         EShaderType type;
         std::string path;
