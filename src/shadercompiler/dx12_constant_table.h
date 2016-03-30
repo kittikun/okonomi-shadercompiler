@@ -45,7 +45,7 @@ namespace Okonomi
         uint_fast32_t getOffset(const std::string&) const;
         inline std::string getName() const { return name_; }
         const uint8_t* getData() const;
-        inline auto getSize() const { return data_.size(); }
+        inline uint32_t getSize() const { return static_cast<uint32_t>(data_.size()); }
 
         template<typename T>
         void setValue(const std::string& name, const T& value)
