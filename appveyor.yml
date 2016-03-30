@@ -53,7 +53,7 @@ notifications:
 - provider: Slack
   auth_token:
     secure: NL05oTnkUQ8es7KG6L70RSOPTd6rV9/bq00OrCiEpfuIZ4NOV008mHhbG7J+YZeXBy1VzEzNgZXFNimtGhALXQ==
-  channel: bots
+  channel: '#bots'
   on_build_success: true
   on_build_failure: true
   on_build_status_changed: false
